@@ -1,7 +1,7 @@
 package br.com.alura.service.http;
 
 import br.com.alura.service.http.AgenciaHttp;
-import br.com.alura.exception.AgenciaNaoAtivaOuNaoEncontraException;
+import br.com.alura.exception.AgenciaNaoAtivaOuNaoEncontradaException;
 import br.com.alura.service.http.SituacaoCadastral;
 import br.com.alura.service.http.SituacaoCadastralHttpService;
 import br.com.alura.domain.Agencia;
@@ -24,7 +24,7 @@ public class AgenciaService {
     private final List<Agencia> agencias = new ArrayList<>();
 
     public void cadastrar(Agencia agencia) {
-        AgenciaHttp agenciaHttp = situacaoCadastralHttpService.buscarPorCnpj(agencia.getCnpj());
+        AgenciaHttp agenciaHttp = situacaoCadastralHttpService.buscarPorCNPJ(agencia.getCnpj());
         if (agenciaHttp != null && agenciaHttp.getSituacaoCadastral() == SituacaoCadastral.ATIVO) {
             agencias.add(agencia);
         } else {
