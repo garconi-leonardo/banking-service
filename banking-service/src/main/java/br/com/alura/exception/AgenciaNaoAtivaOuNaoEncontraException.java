@@ -1,8 +1,7 @@
 package br.com.alura.exception;
 
-public class AgenciaNaoAtivaOuNaoEncontraException extends RuntimeException {
+public class AgenciaNaoAtivaOuNaoEncontradaException extends RuntimeException {
 
-    public AgenciaNaoAtivaOuNaoEncontraException(String message) {
-        super(message);
+    public AgenciaNaoAtivaOuNaoEncontradaException() {
     }
 }
