@@ -14,7 +14,6 @@ interface SituacaoCadastralHttpService {
 
     @GET
     @Path("{cnpj}")
-    AgenciaHttp buscarporCNPJ(String cnpj);
-
+    AgenciaHttp buscarPorCNPJ(String cnpj);
 
 }
