@@ -1,0 +1,12 @@
+services:
+    postgres-db-alura-banking-service:
+        image: postgres:14 #Define a versão da imagem PostgreSQL que será utilizada.
+        container_name: postgres-db-alura-banking-service-container #Nome do container para fácil identificação.
+        environment: #Configura o usuário , a senha e o banco de dados (agencia) que será criado automaticamente.
+          - POSTGRES_USER=admin 
+          - POSTGRES_PASSWORD=admin
+          - POSTGRES_DB=agencia
+        ports: #Mapeia a porta padrão do PostgreSQL (5432) para a 5433.
+          - 5433:5432
+        volumes: #Mapeia o arquivo init.sql, que contém o script SQL de criação de tabelas, para ser executado automaticamente na inicialização.
+          - ./init.sql:/docker-entrypoint-initdb.d/init.sql     
