@@ -5,6 +5,7 @@ import br.com.alura.service.http.AgenciaHttp;
 import br.com.alura.service.http.SituacaoCadastral;
 import br.com.alura.exception.AgenciaNaoAtivaOuNaoEncontradaException;
 import br.com.alura.repository.AgenciaRepository;
+import io.micrometer.core.instrument.MeterRegistry;
 import io.quarkus.logging.Log;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
@@ -13,10 +14,13 @@ import org.eclipse.microprofile.rest.client.inject.RestClient;
 public class AgenciaService {
 
     private final AgenciaRepository agenciaRepository;
+    private final MeterRegistry meterRegistry;
 
-    AgenciaService(AgenciaRepository agenciaRepository) {
+    AgenciaService(AgenciaRepository agenciaRepository, MeterRegistry meterRegistry) {
         this.agenciaRepository = agenciaRepository;
+        this.meterRegistry = meterRegistry;
     }
+
 
     @RestClient
     SituacaoCadastralHttpService situacaoCadastralHttpService;
@@ -24,10 +28,12 @@ public class AgenciaService {
     public void cadastrar(Agencia agencia) {
         AgenciaHttp agenciaHttp = situacaoCadastralHttpService.buscarPorCnpj(agencia.getCnpj());
         if(agenciaHttp != null && agenciaHttp.getSituacaoCadastral().equals(SituacaoCadastral.ATIVO)) {
+            this.meterRegistry.counter("agencia_adicionada_count").increment();
             Log.info("Agencia com o CNPJ " + agencia.getCnpj() + " foi cadastrada.");
             agenciaRepository.persist(agencia);
         } else {
             Log.info("Agencia com CNPJ " + agencia.getCnpj() + " não foi cadastrada.");
+            this.meterRegistry.counter("agencia_nao_adicionada_count").increment();
             throw new AgenciaNaoAtivaOuNaoEncontradaException();
         }
     }

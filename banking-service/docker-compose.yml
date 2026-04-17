@@ -1,12 +1,27 @@
 services:
-    postgres-db-alura-banking-service:
-        image: postgres:14 #Define a versão da imagem PostgreSQL que será utilizada.
-        container_name: postgres-db-alura-banking-service-container #Nome do container para fácil identificação.
-        environment: #Configura o usuário , a senha e o banco de dados (agencia) que será criado automaticamente.
-          - POSTGRES_USER=admin 
-          - POSTGRES_PASSWORD=admin
-          - POSTGRES_DB=agencia
-        ports: #Mapeia a porta padrão do PostgreSQL (5432) para a 5433.
-          - 5433:5432
-        volumes: #Mapeia o arquivo init.sql, que contém o script SQL de criação de tabelas, para ser executado automaticamente na inicialização.
-          - ./init.sql:/docker-entrypoint-initdb.d/init.sql     
+  banking-service:
+    image: joao0212/banking-service:v1
+    container_name: banking-service-container
+    environment:
+      - QUARKUS_CLIENT_HTTP=host.docker.internal
+      - QUARKUS_CLIENT_HTTP_PORT=8181
+      - QUARKUS_DATASOURCE_USERNAME=admin
+      - QUARKUS_DATASOURCE_PASSWORD=admin
+      - QUARKUS_DATASOURCE_HOST=postgres-db-alura-banking-service
+      - QUARKUS_DATASOURCE_PORT=5432
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres-db-alura-banking-service
+
+  postgres-db-alura-banking-service:
+      image: postgres:14 #Define a versão da imagem PostgreSQL que será utilizada.
+      container_name: postgres-db-alura-banking-service-container #Nome do container para fácil identificação.
+      environment: #Configura o usuário , a senha e o banco de dados (agencia) que será criado automaticamente.
+        - POSTGRES_USER=admin
+        - POSTGRES_PASSWORD=admin
+        - POSTGRES_DB=agencia
+      ports: #Mapeia a porta padrão do PostgreSQL (5432) para a 5433.
+        - 5433:5432
+      volumes: #Mapeia o arquivo init.sql, que contém o script SQL de criação de tabelas, para ser executado automaticamente na inicialização.
+        - ./init.sql:/docker-entrypoint-initdb.d/init.sql

@@ -1,0 +1,9 @@
+br\com\alura\domain\Endereco.class
+br\com\alura\domain\Agencia.class
+br\com\alura\exception\AgenciaNaoAtivaOuNaoEncontradaException.class
+br\com\alura\service\http\AgenciaService.class
+br\com\alura\service\http\SituacaoCadastral.class
+br\com\alura\service\http\AgenciaHttp.class
+br\com\alura\service\http\SituacaoCadastralHttpService.class
+br\com\alura\controller\AgenciaController.class
+br\com\alura\repository\AgenciaRepository.class
