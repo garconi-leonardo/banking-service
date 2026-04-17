@@ -5,6 +5,7 @@ import br.com.alura.service.http.AgenciaHttp;
 import br.com.alura.service.http.SituacaoCadastral;
 import br.com.alura.exception.AgenciaNaoAtivaOuNaoEncontradaException;
 import br.com.alura.repository.AgenciaRepository;
+import io.quarkus.logging.Log;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
@@ -23,8 +24,10 @@ public class AgenciaService {
     public void cadastrar(Agencia agencia) {
         AgenciaHttp agenciaHttp = situacaoCadastralHttpService.buscarPorCnpj(agencia.getCnpj());
         if(agenciaHttp != null && agenciaHttp.getSituacaoCadastral().equals(SituacaoCadastral.ATIVO)) {
+            Log.info("Agencia com o CNPJ " + agencia.getCnpj() + " foi cadastrada.");
             agenciaRepository.persist(agencia);
         } else {
+            Log.info("Agencia com CNPJ " + agencia.getCnpj() + " não foi cadastrada.");
             throw new AgenciaNaoAtivaOuNaoEncontradaException();
         }
     }
@@ -34,6 +37,7 @@ public class AgenciaService {
     }
 
     public void deletar(Long id) {
+        Log.info("A agência com o id " + id + " foi deletada.");
         agenciaRepository.deleteById(id);
     }
 
@@ -46,6 +50,9 @@ public class AgenciaService {
             entidadeExistente.setNome(agencia.getNome());
             entidadeExistente.setRazaoSocial(agencia.getRazaoSocial());
             entidadeExistente.setCnpj(agencia.getCnpj());
+
+            Log.info("A agência com o CNPJ " + agencia.getCnpj() + " foi alterada.");
+
         } else {
             throw new IllegalStateException("Agência com ID " + agencia.getId() + " não encontrada");
         }

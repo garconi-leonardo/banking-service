@@ -6,7 +6,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-class Endereco {
+public class Endereco {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -14,6 +15,18 @@ class Endereco {
     private String logradouro;
     private String complemento;
     private Integer numero;
+
+    public Endereco() {
+
+    }
+
+    public Endereco(Integer id, String rua, String logradouro, String complemento, Integer numero) {
+        this.id = id;
+        this.rua = rua;
+        this.logradouro = logradouro;
+        this.complemento = complemento;
+        this.numero = numero;
+    }
 
     public Integer getId() {
         return id;
